@@ -18,7 +18,7 @@ const searchSchema = z.object({
   page: z.number().default(defaultValues.page),
 });
 
-export const Route = createFileRoute('/$storeId/products_/')({
+export const Route = createFileRoute('/products_/')({
   component: RouteComponent,
   validateSearch: zodValidator(searchSchema),
   search: {

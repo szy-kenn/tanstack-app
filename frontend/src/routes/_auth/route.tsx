@@ -10,7 +10,7 @@ function RouteComponent() {
   return (
     <>
       <Navbar />
-      <div className="bg-[#ef4d64] h-full">
+      <div className="h-full">
         <Outlet />
       </div>
       <Footer />
