@@ -1,9 +1,19 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import logo from '../logo.svg';
 import '../App.css';
+import ApiAuth from '@/lib/api';
 
 export const Route = createFileRoute('/')({
   component: App,
+  beforeLoad: async () => {
+    const user = await ApiAuth.get('/user');
+    console.log(user);
+    if (!user) {
+      throw redirect({
+        to: '/login',
+      });
+    }
+  },
 });
 
 function App() {

@@ -1,6 +1,5 @@
-import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router';
 import { Card, CardHeader, CardBody, Input, Button, CardFooter, Alert } from '@heroui/react';
-import { useMutation } from '@tanstack/react-query';
 import { useForm, type AnyFieldApi } from '@tanstack/react-form';
 import ApiAuth from '@/lib/api';
 import { useState } from 'react';
@@ -17,6 +16,18 @@ type NewUserSchema = {
   role: string;
 };
 
+type ValidationErrors = {
+  [K in keyof SignupFormValues]?: string[];
+};
+
+interface SignupFormValues {
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  role: string;
+}
+
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
     <>
@@ -27,15 +38,20 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 }
 
 function RouteComponent() {
-  const { isPending, isError, isSuccess, error, data, mutate } = useMutation({
-    mutationFn: async (user: NewUserSchema) => {
-      const response = await ApiAuth.post('/api/register', user);
-      return await response.data;
-    },
-    onError: (error) => {
-      console.error('Error:', error);
-    },
-  });
+  // const { isPending, isError, isSuccess, error, data, mutate } = useMutation({
+  //   mutationFn: async (user: NewUserSchema) => {
+  //     const response = await ApiAuth.post('/api/register', user);
+  //     return await response.data;
+  //   },
+  //   onError: (error) => {
+  //     console.error('Error:', error);
+  //   },
+  // });
+
+  const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<ValidationErrors>({});
 
   const form = useForm({
     defaultValues: {
@@ -46,10 +62,15 @@ function RouteComponent() {
       role: 'user',
     },
     onSubmit: async ({ value }) => {
-      mutate(value);
-      redirect({
-        to: '/',
-      });
+      try {
+        await ApiAuth.post('/register', value);
+        console.log('User registered successfully');
+        navigate({ to: '/' });
+      } catch (error: any) {
+        if (error.status === 422) {
+          setError(error.response.data.errors);
+        }
+      }
     },
   });
 
@@ -58,16 +79,11 @@ function RouteComponent() {
       <div className="bg-black text-white w-full h-full flex items-center justify-center">
         <Card className="px-6 py-4">
           <CardHeader className="flex flex-col gap-2">
-            {isError && (
+            {/* {error.length > 0 && (
               <div key="danger" className="w-full flex items-center my-3">
-                <Alert color={'danger'} title={`${error.message}`} />
+                <Alert color={'danger'} title={`${error}`} />
               </div>
-            )}
-            {isSuccess && (
-              <div key="success" className="w-full flex items-center my-3">
-                <Alert color={'success'} title={`Account successfully created.`} />
-              </div>
-            )}
+            )} */}
             <p className="text-md font-bold">Create a new account</p>
           </CardHeader>
           <CardBody>
@@ -171,7 +187,7 @@ function RouteComponent() {
               <form.Subscribe
                 selector={(state) => [state.canSubmit, state.isSubmitting]}
                 children={([canSubmit, isSubmitting]) => (
-                  <Button color="primary" type="submit" disabled={!canSubmit || isPending}>
+                  <Button color="primary" type="submit" disabled={!canSubmit || isLoading}>
                     {isSubmitting ? '...' : 'Sign Up'}
                   </Button>
                 )}

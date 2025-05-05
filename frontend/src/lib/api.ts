@@ -11,29 +11,48 @@ export const ApiAuth = axios.create({
   },
 });
 
-ApiAuth.interceptors.request.use(async (config) => {
-  try {
-    // First get the CSRF cookie
-    await axios.get(`${import.meta.env.VITE_API_AUTH_URL}/sanctum/csrf-cookie`, {
-      withCredentials: true,
-    });
-
-    // Then extract the XSRF token from cookies
-    const xsrfToken = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('XSRF-TOKEN='))
-      ?.split('=')[1];
-
-    if (xsrfToken) {
-      // Set the decoded token in the request headers
-      config.headers['X-XSRF-TOKEN'] = decodeURIComponent(xsrfToken);
+ApiAuth.interceptors.request.use(
+  (response) => {
+    // Check if response contains authorization token
+    const token = response.data?.token || localStorage.getItem('auth_token');
+    if (token) {
+      console.log(token);
+      localStorage.setItem('auth_token', token);
+      // Add token to default headers for future requests
+      ApiAuth.defaults.headers.head.Authorization = `Bearer ${token}`;
+      // ApiAuth.defaults.headers.common = { Authorization: `Bearer ${token}` };
+      // ApiAuth.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
-
-    return config;
-  } catch (error) {
-    console.error('CSRF token fetch failed:', error);
+    return response;
+  },
+  (error) => {
     return Promise.reject(error);
   }
-});
+);
+
+// ApiAuth.interceptors.request.use(async (config) => {
+//   try {
+//     // First get the CSRF cookie
+//     await axios.get(`${import.meta.env.VITE_API_AUTH_URL}/sanctum/csrf-cookie`, {
+//       withCredentials: true,
+//     });
+
+//     // Then extract the XSRF token from cookies
+//     const xsrfToken = document.cookie
+//       .split('; ')
+//       .find((row) => row.startsWith('XSRF-TOKEN='))
+//       ?.split('=')[1];
+
+//     if (xsrfToken) {
+//       // Set the decoded token in the request headers
+//       config.headers['X-XSRF-TOKEN'] = decodeURIComponent(xsrfToken);
+//     }
+
+//     return config;
+//   } catch (error) {
+//     console.error('CSRF token fetch failed:', error);
+//     return Promise.reject(error);
+//   }
+// });
 
 export default ApiAuth;
