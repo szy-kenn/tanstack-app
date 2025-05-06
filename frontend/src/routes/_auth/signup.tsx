@@ -1,32 +1,13 @@
 import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router';
 import { Card, CardHeader, CardBody, Input, Button, CardFooter, Alert } from '@heroui/react';
 import { useForm, type AnyFieldApi } from '@tanstack/react-form';
-import ApiAuth from '@/lib/api';
+import ApiAuth from '@/lib/api-auth';
 import { useState } from 'react';
+import type { ValidationErrors } from '@/lib/types';
 
 export const Route = createFileRoute('/_auth/signup')({
   component: RouteComponent,
 });
-
-type NewUserSchema = {
-  name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
-  role: string;
-};
-
-type ValidationErrors = {
-  [K in keyof SignupFormValues]?: string[];
-};
-
-interface SignupFormValues {
-  name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
-  role: string;
-}
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
@@ -38,20 +19,10 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 }
 
 function RouteComponent() {
-  // const { isPending, isError, isSuccess, error, data, mutate } = useMutation({
-  //   mutationFn: async (user: NewUserSchema) => {
-  //     const response = await ApiAuth.post('/api/register', user);
-  //     return await response.data;
-  //   },
-  //   onError: (error) => {
-  //     console.error('Error:', error);
-  //   },
-  // });
-
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ValidationErrors>({});
+  const [isLoading] = useState(false);
+  const [, setError] = useState<ValidationErrors>({});
 
   const form = useForm({
     defaultValues: {
@@ -64,7 +35,6 @@ function RouteComponent() {
     onSubmit: async ({ value }) => {
       try {
         await ApiAuth.post('/register', value);
-        console.log('User registered successfully');
         navigate({ to: '/' });
       } catch (error: any) {
         if (error.status === 422) {

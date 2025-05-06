@@ -8,12 +8,10 @@ export const Route = createFileRoute('/_auth')({
 
 function RouteComponent() {
   return (
-    <>
+    <main className="dark flex flex-col min-h-screen h-full w-full bg-black text-white">
       <Navbar />
-      <div className="h-full">
-        <Outlet />
-      </div>
+      <Outlet />
       <Footer />
-    </>
+    </main>
   );
 }

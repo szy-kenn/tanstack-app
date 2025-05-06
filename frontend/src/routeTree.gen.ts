@@ -12,15 +12,18 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/_auth/route'
-import { Route as IndexImport } from './routes/index'
-import { Route as ProductsIndexImport } from './routes/products_/index'
+import { Route as AppRouteImport } from './routes/_app/route'
+import { Route as AppIndexImport } from './routes/_app/index'
 import { Route as AuthSignupImport } from './routes/_auth/signup'
 import { Route as AuthLoginImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordImport } from './routes/_auth/forgot-password'
-import { Route as appProfileImport } from './routes/(app)/profile'
-import { Route as appCheckoutImport } from './routes/(app)/checkout'
-import { Route as appCartImport } from './routes/(app)/cart'
-import { Route as ProductsProductIdIndexImport } from './routes/products_/$productId/index'
+import { Route as AppProfileImport } from './routes/_app/profile'
+import { Route as AppHomeImport } from './routes/_app/home'
+import { Route as AppCheckoutImport } from './routes/_app/checkout'
+import { Route as AppCartImport } from './routes/_app/cart'
+import { Route as AppAboutImport } from './routes/_app/about'
+import { Route as AppProductsIndexImport } from './routes/_app/products_/index'
+import { Route as AppProductsProductIdIndexImport } from './routes/_app/products_/$productId/index'
 
 // Create/Update Routes
 
@@ -29,16 +32,15 @@ const AuthRouteRoute = AuthRouteImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+const AppRouteRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProductsIndexRoute = ProductsIndexImport.update({
-  id: '/products_/',
-  path: '/products/',
-  getParentRoute: () => rootRoute,
+const AppIndexRoute = AppIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 const AuthSignupRoute = AuthSignupImport.update({
@@ -59,39 +61,57 @@ const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
-const appProfileRoute = appProfileImport.update({
-  id: '/(app)/profile',
+const AppProfileRoute = AppProfileImport.update({
+  id: '/profile',
   path: '/profile',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
-const appCheckoutRoute = appCheckoutImport.update({
-  id: '/(app)/checkout',
+const AppHomeRoute = AppHomeImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppCheckoutRoute = AppCheckoutImport.update({
+  id: '/checkout',
   path: '/checkout',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
-const appCartRoute = appCartImport.update({
-  id: '/(app)/cart',
+const AppCartRoute = AppCartImport.update({
+  id: '/cart',
   path: '/cart',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
-const ProductsProductIdIndexRoute = ProductsProductIdIndexImport.update({
+const AppAboutRoute = AppAboutImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppProductsIndexRoute = AppProductsIndexImport.update({
+  id: '/products_/',
+  path: '/products/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppProductsProductIdIndexRoute = AppProductsProductIdIndexImport.update({
   id: '/products_/$productId/',
   path: '/products/$productId/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRoute
     }
     '/_auth': {
@@ -101,26 +121,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRoute
     }
-    '/(app)/cart': {
-      id: '/(app)/cart'
+    '/_app/about': {
+      id: '/_app/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AppAboutImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_app/cart': {
+      id: '/_app/cart'
       path: '/cart'
       fullPath: '/cart'
-      preLoaderRoute: typeof appCartImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppCartImport
+      parentRoute: typeof AppRouteImport
     }
-    '/(app)/checkout': {
-      id: '/(app)/checkout'
+    '/_app/checkout': {
+      id: '/_app/checkout'
       path: '/checkout'
       fullPath: '/checkout'
-      preLoaderRoute: typeof appCheckoutImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppCheckoutImport
+      parentRoute: typeof AppRouteImport
     }
-    '/(app)/profile': {
-      id: '/(app)/profile'
+    '/_app/home': {
+      id: '/_app/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AppHomeImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_app/profile': {
+      id: '/_app/profile'
       path: '/profile'
       fullPath: '/profile'
-      preLoaderRoute: typeof appProfileImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppProfileImport
+      parentRoute: typeof AppRouteImport
     }
     '/_auth/forgot-password': {
       id: '/_auth/forgot-password'
@@ -143,24 +177,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof AuthRouteImport
     }
-    '/products_/': {
-      id: '/products_/'
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_app/products_/': {
+      id: '/_app/products_/'
       path: '/products'
       fullPath: '/products'
-      preLoaderRoute: typeof ProductsIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppProductsIndexImport
+      parentRoute: typeof AppRouteImport
     }
-    '/products_/$productId/': {
-      id: '/products_/$productId/'
+    '/_app/products_/$productId/': {
+      id: '/_app/products_/$productId/'
       path: '/products/$productId'
       fullPath: '/products/$productId'
-      preLoaderRoute: typeof ProductsProductIdIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppProductsProductIdIndexImport
+      parentRoute: typeof AppRouteImport
     }
   }
 }
 
 // Create and export the route tree
+
+interface AppRouteRouteChildren {
+  AppAboutRoute: typeof AppAboutRoute
+  AppCartRoute: typeof AppCartRoute
+  AppCheckoutRoute: typeof AppCheckoutRoute
+  AppHomeRoute: typeof AppHomeRoute
+  AppProfileRoute: typeof AppProfileRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppProductsIndexRoute: typeof AppProductsIndexRoute
+  AppProductsProductIdIndexRoute: typeof AppProductsProductIdIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppAboutRoute: AppAboutRoute,
+  AppCartRoute: AppCartRoute,
+  AppCheckoutRoute: AppCheckoutRoute,
+  AppHomeRoute: AppHomeRoute,
+  AppProfileRoute: AppProfileRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppProductsIndexRoute: AppProductsIndexRoute,
+  AppProductsProductIdIndexRoute: AppProductsProductIdIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
 
 interface AuthRouteRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
@@ -179,103 +246,107 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '': typeof AuthRouteRouteWithChildren
-  '/cart': typeof appCartRoute
-  '/checkout': typeof appCheckoutRoute
-  '/profile': typeof appProfileRoute
+  '/about': typeof AppAboutRoute
+  '/cart': typeof AppCartRoute
+  '/checkout': typeof AppCheckoutRoute
+  '/home': typeof AppHomeRoute
+  '/profile': typeof AppProfileRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
-  '/products': typeof ProductsIndexRoute
-  '/products/$productId': typeof ProductsProductIdIndexRoute
+  '/': typeof AppIndexRoute
+  '/products': typeof AppProductsIndexRoute
+  '/products/$productId': typeof AppProductsProductIdIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '': typeof AuthRouteRouteWithChildren
-  '/cart': typeof appCartRoute
-  '/checkout': typeof appCheckoutRoute
-  '/profile': typeof appProfileRoute
+  '/about': typeof AppAboutRoute
+  '/cart': typeof AppCartRoute
+  '/checkout': typeof AppCheckoutRoute
+  '/home': typeof AppHomeRoute
+  '/profile': typeof AppProfileRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
-  '/products': typeof ProductsIndexRoute
-  '/products/$productId': typeof ProductsProductIdIndexRoute
+  '/': typeof AppIndexRoute
+  '/products': typeof AppProductsIndexRoute
+  '/products/$productId': typeof AppProductsProductIdIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/(app)/cart': typeof appCartRoute
-  '/(app)/checkout': typeof appCheckoutRoute
-  '/(app)/profile': typeof appProfileRoute
+  '/_app/about': typeof AppAboutRoute
+  '/_app/cart': typeof AppCartRoute
+  '/_app/checkout': typeof AppCheckoutRoute
+  '/_app/home': typeof AppHomeRoute
+  '/_app/profile': typeof AppProfileRoute
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
-  '/products_/': typeof ProductsIndexRoute
-  '/products_/$productId/': typeof ProductsProductIdIndexRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/products_/': typeof AppProductsIndexRoute
+  '/_app/products_/$productId/': typeof AppProductsProductIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | ''
+    | '/about'
     | '/cart'
     | '/checkout'
+    | '/home'
     | '/profile'
     | '/forgot-password'
     | '/login'
     | '/signup'
+    | '/'
     | '/products'
     | '/products/$productId'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | ''
+    | '/about'
     | '/cart'
     | '/checkout'
+    | '/home'
     | '/profile'
     | '/forgot-password'
     | '/login'
     | '/signup'
+    | '/'
     | '/products'
     | '/products/$productId'
   id:
     | '__root__'
-    | '/'
+    | '/_app'
     | '/_auth'
-    | '/(app)/cart'
-    | '/(app)/checkout'
-    | '/(app)/profile'
+    | '/_app/about'
+    | '/_app/cart'
+    | '/_app/checkout'
+    | '/_app/home'
+    | '/_app/profile'
     | '/_auth/forgot-password'
     | '/_auth/login'
     | '/_auth/signup'
-    | '/products_/'
-    | '/products_/$productId/'
+    | '/_app/'
+    | '/_app/products_/'
+    | '/_app/products_/$productId/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  appCartRoute: typeof appCartRoute
-  appCheckoutRoute: typeof appCheckoutRoute
-  appProfileRoute: typeof appProfileRoute
-  ProductsIndexRoute: typeof ProductsIndexRoute
-  ProductsProductIdIndexRoute: typeof ProductsProductIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  appCartRoute: appCartRoute,
-  appCheckoutRoute: appCheckoutRoute,
-  appProfileRoute: appProfileRoute,
-  ProductsIndexRoute: ProductsIndexRoute,
-  ProductsProductIdIndexRoute: ProductsProductIdIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -288,17 +359,22 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/_auth",
-        "/(app)/cart",
-        "/(app)/checkout",
-        "/(app)/profile",
-        "/products_/",
-        "/products_/$productId/"
+        "/_app",
+        "/_auth"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_app": {
+      "filePath": "_app/route.tsx",
+      "children": [
+        "/_app/about",
+        "/_app/cart",
+        "/_app/checkout",
+        "/_app/home",
+        "/_app/profile",
+        "/_app/",
+        "/_app/products_/",
+        "/_app/products_/$productId/"
+      ]
     },
     "/_auth": {
       "filePath": "_auth/route.tsx",
@@ -308,14 +384,25 @@ export const routeTree = rootRoute
         "/_auth/signup"
       ]
     },
-    "/(app)/cart": {
-      "filePath": "(app)/cart.tsx"
+    "/_app/about": {
+      "filePath": "_app/about.tsx",
+      "parent": "/_app"
     },
-    "/(app)/checkout": {
-      "filePath": "(app)/checkout.tsx"
+    "/_app/cart": {
+      "filePath": "_app/cart.tsx",
+      "parent": "/_app"
     },
-    "/(app)/profile": {
-      "filePath": "(app)/profile.tsx"
+    "/_app/checkout": {
+      "filePath": "_app/checkout.tsx",
+      "parent": "/_app"
+    },
+    "/_app/home": {
+      "filePath": "_app/home.tsx",
+      "parent": "/_app"
+    },
+    "/_app/profile": {
+      "filePath": "_app/profile.tsx",
+      "parent": "/_app"
     },
     "/_auth/forgot-password": {
       "filePath": "_auth/forgot-password.tsx",
@@ -329,11 +416,17 @@ export const routeTree = rootRoute
       "filePath": "_auth/signup.tsx",
       "parent": "/_auth"
     },
-    "/products_/": {
-      "filePath": "products_/index.tsx"
+    "/_app/": {
+      "filePath": "_app/index.tsx",
+      "parent": "/_app"
     },
-    "/products_/$productId/": {
-      "filePath": "products_/$productId/index.tsx"
+    "/_app/products_/": {
+      "filePath": "_app/products_/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/products_/$productId/": {
+      "filePath": "_app/products_/$productId/index.tsx",
+      "parent": "/_app"
     }
   }
 }

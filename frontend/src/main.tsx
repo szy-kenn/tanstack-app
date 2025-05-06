@@ -8,6 +8,9 @@ import { routeTree } from './routeTree.gen.ts';
 
 import './styles.css';
 import reportWebVitals from './reportWebVitals.ts';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from './redux/index.ts';
+import { Provider } from 'react-redux';
 
 const queryClient = new QueryClient();
 
@@ -20,7 +23,8 @@ const router = createRouter({
   defaultPreload: 'intent',
   scrollRestoration: true,
   defaultStructuralSharing: true,
-  defaultPreloadStaleTime: 0,
+  defaultPreloadStaleTime: 1000 * 60 * 3,
+  defaultGcTime: 1000 * 60 * 5,
 });
 
 // Register the router instance for type safety
@@ -36,9 +40,13 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+          </QueryClientProvider>
+        </PersistGate>
+      </Provider>
     </StrictMode>
   );
 }
