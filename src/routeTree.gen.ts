@@ -11,50 +11,36 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
-import { Route as ProductsRouteImport } from './routes/products/route'
 import { Route as AuthRouteImport } from './routes/_auth/route'
-import { Route as IndexImport } from './routes/index'
-import { Route as ProductsIndexImport } from './routes/products/index'
-import { Route as ProductsProductIdImport } from './routes/products/$productId'
+import { Route as AppRouteImport } from './routes/_app/route'
+import { Route as AppIndexImport } from './routes/_app/index'
 import { Route as AuthSignupImport } from './routes/_auth/signup'
 import { Route as AuthLoginImport } from './routes/_auth/login'
+import { Route as AuthForgotPasswordImport } from './routes/_auth/forgot-password'
+import { Route as AppProfileImport } from './routes/_app/profile'
+import { Route as AppHomeImport } from './routes/_app/home'
+import { Route as AppCheckoutImport } from './routes/_app/checkout'
+import { Route as AppCartImport } from './routes/_app/cart'
+import { Route as AppAboutImport } from './routes/_app/about'
+import { Route as AppProductsIndexImport } from './routes/_app/products_/index'
+import { Route as AppProductsProductIdIndexImport } from './routes/_app/products_/$productId/index'
 
 // Create/Update Routes
-
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ProductsRouteRoute = ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AuthRouteRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+const AppRouteRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProductsIndexRoute = ProductsIndexImport.update({
+const AppIndexRoute = AppIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => ProductsRouteRoute,
-} as any)
-
-const ProductsProductIdRoute = ProductsProductIdImport.update({
-  id: '/$productId',
-  path: '/$productId',
-  getParentRoute: () => ProductsRouteRoute,
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 const AuthSignupRoute = AuthSignupImport.update({
@@ -69,15 +55,63 @@ const AuthLoginRoute = AuthLoginImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
+const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const AppProfileRoute = AppProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppHomeRoute = AppHomeImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppCheckoutRoute = AppCheckoutImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppCartRoute = AppCartImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppAboutRoute = AppAboutImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppProductsIndexRoute = AppProductsIndexImport.update({
+  id: '/products_/',
+  path: '/products/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppProductsProductIdIndexRoute = AppProductsProductIdIndexImport.update({
+  id: '/products_/$productId/',
+  path: '/products/$productId/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRoute
     }
     '/_auth': {
@@ -87,19 +121,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRoute
     }
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsRouteImport
-      parentRoute: typeof rootRoute
-    }
-    '/about': {
-      id: '/about'
+    '/_app/about': {
+      id: '/_app/about'
       path: '/about'
       fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AppAboutImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_app/cart': {
+      id: '/_app/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof AppCartImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_app/checkout': {
+      id: '/_app/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof AppCheckoutImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_app/home': {
+      id: '/_app/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AppHomeImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_auth/forgot-password': {
+      id: '/_auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordImport
+      parentRoute: typeof AuthRouteImport
     }
     '/_auth/login': {
       id: '/_auth/login'
@@ -115,31 +177,66 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof AuthRouteImport
     }
-    '/products/$productId': {
-      id: '/products/$productId'
-      path: '/$productId'
-      fullPath: '/products/$productId'
-      preLoaderRoute: typeof ProductsProductIdImport
-      parentRoute: typeof ProductsRouteImport
-    }
-    '/products/': {
-      id: '/products/'
+    '/_app/': {
+      id: '/_app/'
       path: '/'
-      fullPath: '/products/'
-      preLoaderRoute: typeof ProductsIndexImport
-      parentRoute: typeof ProductsRouteImport
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_app/products_/': {
+      id: '/_app/products_/'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof AppProductsIndexImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/_app/products_/$productId/': {
+      id: '/_app/products_/$productId/'
+      path: '/products/$productId'
+      fullPath: '/products/$productId'
+      preLoaderRoute: typeof AppProductsProductIdIndexImport
+      parentRoute: typeof AppRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AppRouteRouteChildren {
+  AppAboutRoute: typeof AppAboutRoute
+  AppCartRoute: typeof AppCartRoute
+  AppCheckoutRoute: typeof AppCheckoutRoute
+  AppHomeRoute: typeof AppHomeRoute
+  AppProfileRoute: typeof AppProfileRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppProductsIndexRoute: typeof AppProductsIndexRoute
+  AppProductsProductIdIndexRoute: typeof AppProductsProductIdIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppAboutRoute: AppAboutRoute,
+  AppCartRoute: AppCartRoute,
+  AppCheckoutRoute: AppCheckoutRoute,
+  AppHomeRoute: AppHomeRoute,
+  AppProfileRoute: AppProfileRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppProductsIndexRoute: AppProductsIndexRoute,
+  AppProductsProductIdIndexRoute: AppProductsProductIdIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 interface AuthRouteRouteChildren {
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignupRoute: typeof AuthSignupRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignupRoute: AuthSignupRoute,
 }
@@ -148,98 +245,108 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
-interface ProductsRouteRouteChildren {
-  ProductsProductIdRoute: typeof ProductsProductIdRoute
-  ProductsIndexRoute: typeof ProductsIndexRoute
-}
-
-const ProductsRouteRouteChildren: ProductsRouteRouteChildren = {
-  ProductsProductIdRoute: ProductsProductIdRoute,
-  ProductsIndexRoute: ProductsIndexRoute,
-}
-
-const ProductsRouteRouteWithChildren = ProductsRouteRoute._addFileChildren(
-  ProductsRouteRouteChildren,
-)
-
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '': typeof AuthRouteRouteWithChildren
-  '/products': typeof ProductsRouteRouteWithChildren
-  '/about': typeof AboutRoute
+  '/about': typeof AppAboutRoute
+  '/cart': typeof AppCartRoute
+  '/checkout': typeof AppCheckoutRoute
+  '/home': typeof AppHomeRoute
+  '/profile': typeof AppProfileRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
-  '/products/$productId': typeof ProductsProductIdRoute
-  '/products/': typeof ProductsIndexRoute
+  '/': typeof AppIndexRoute
+  '/products': typeof AppProductsIndexRoute
+  '/products/$productId': typeof AppProductsProductIdIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '': typeof AuthRouteRouteWithChildren
-  '/about': typeof AboutRoute
+  '/about': typeof AppAboutRoute
+  '/cart': typeof AppCartRoute
+  '/checkout': typeof AppCheckoutRoute
+  '/home': typeof AppHomeRoute
+  '/profile': typeof AppProfileRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
-  '/products/$productId': typeof ProductsProductIdRoute
-  '/products': typeof ProductsIndexRoute
+  '/': typeof AppIndexRoute
+  '/products': typeof AppProductsIndexRoute
+  '/products/$productId': typeof AppProductsProductIdIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/products': typeof ProductsRouteRouteWithChildren
-  '/about': typeof AboutRoute
+  '/_app/about': typeof AppAboutRoute
+  '/_app/cart': typeof AppCartRoute
+  '/_app/checkout': typeof AppCheckoutRoute
+  '/_app/home': typeof AppHomeRoute
+  '/_app/profile': typeof AppProfileRoute
+  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
-  '/products/$productId': typeof ProductsProductIdRoute
-  '/products/': typeof ProductsIndexRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/products_/': typeof AppProductsIndexRoute
+  '/_app/products_/$productId/': typeof AppProductsProductIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | ''
-    | '/products'
     | '/about'
+    | '/cart'
+    | '/checkout'
+    | '/home'
+    | '/profile'
+    | '/forgot-password'
     | '/login'
     | '/signup'
+    | '/'
+    | '/products'
     | '/products/$productId'
-    | '/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | ''
     | '/about'
+    | '/cart'
+    | '/checkout'
+    | '/home'
+    | '/profile'
+    | '/forgot-password'
     | '/login'
     | '/signup'
-    | '/products/$productId'
+    | '/'
     | '/products'
+    | '/products/$productId'
   id:
     | '__root__'
-    | '/'
+    | '/_app'
     | '/_auth'
-    | '/products'
-    | '/about'
+    | '/_app/about'
+    | '/_app/cart'
+    | '/_app/checkout'
+    | '/_app/home'
+    | '/_app/profile'
+    | '/_auth/forgot-password'
     | '/_auth/login'
     | '/_auth/signup'
-    | '/products/$productId'
-    | '/products/'
+    | '/_app/'
+    | '/_app/products_/'
+    | '/_app/products_/$productId/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  ProductsRouteRoute: typeof ProductsRouteRouteWithChildren
-  AboutRoute: typeof AboutRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  ProductsRouteRoute: ProductsRouteRouteWithChildren,
-  AboutRoute: AboutRoute,
 }
 
 export const routeTree = rootRoute
@@ -252,31 +359,54 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/_auth",
-        "/products",
-        "/about"
+        "/_app",
+        "/_auth"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_app": {
+      "filePath": "_app/route.tsx",
+      "children": [
+        "/_app/about",
+        "/_app/cart",
+        "/_app/checkout",
+        "/_app/home",
+        "/_app/profile",
+        "/_app/",
+        "/_app/products_/",
+        "/_app/products_/$productId/"
+      ]
     },
     "/_auth": {
       "filePath": "_auth/route.tsx",
       "children": [
+        "/_auth/forgot-password",
         "/_auth/login",
         "/_auth/signup"
       ]
     },
-    "/products": {
-      "filePath": "products/route.tsx",
-      "children": [
-        "/products/$productId",
-        "/products/"
-      ]
+    "/_app/about": {
+      "filePath": "_app/about.tsx",
+      "parent": "/_app"
     },
-    "/about": {
-      "filePath": "about.tsx"
+    "/_app/cart": {
+      "filePath": "_app/cart.tsx",
+      "parent": "/_app"
+    },
+    "/_app/checkout": {
+      "filePath": "_app/checkout.tsx",
+      "parent": "/_app"
+    },
+    "/_app/home": {
+      "filePath": "_app/home.tsx",
+      "parent": "/_app"
+    },
+    "/_app/profile": {
+      "filePath": "_app/profile.tsx",
+      "parent": "/_app"
+    },
+    "/_auth/forgot-password": {
+      "filePath": "_auth/forgot-password.tsx",
+      "parent": "/_auth"
     },
     "/_auth/login": {
       "filePath": "_auth/login.tsx",
@@ -286,13 +416,17 @@ export const routeTree = rootRoute
       "filePath": "_auth/signup.tsx",
       "parent": "/_auth"
     },
-    "/products/$productId": {
-      "filePath": "products/$productId.tsx",
-      "parent": "/products"
+    "/_app/": {
+      "filePath": "_app/index.tsx",
+      "parent": "/_app"
     },
-    "/products/": {
-      "filePath": "products/index.tsx",
-      "parent": "/products"
+    "/_app/products_/": {
+      "filePath": "_app/products_/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/products_/$productId/": {
+      "filePath": "_app/products_/$productId/index.tsx",
+      "parent": "/_app"
     }
   }
 }

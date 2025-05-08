@@ -1,20 +1,15 @@
-import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import type { RouterContext } from '@/lib/types';
+import { verifyAuth } from '@/lib/verify-auth';
+import type { QueryClient } from '@tanstack/react-query';
+import { Outlet, createRootRouteWithContext, type ParsedLocation } from '@tanstack/react-router';
+import '../App.css';
 
-export const Route = createRootRoute({
-  component: () => (
-    <>
-    <div className='flex py-1.5 px-3'>
-      <Link to='/' className='[&.active]:font-bold hover:bg-gray-200 p-2 px-3 rounded-sm'>
-        Home
-      </Link>
-      <Link to="/about" className='[&.active]:font-bold hover:bg-gray-200 p-2 px-3 rounded-sm'>
-        About
-      </Link>
-    </div>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-},
-)
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+}>()({
+  loader: async ({ context, location }: { context: RouterContext; location: ParsedLocation<{}> }) =>
+    verifyAuth(location.pathname, context.queryClient),
+  component: () => {
+    return <Outlet />;
+  },
+});
