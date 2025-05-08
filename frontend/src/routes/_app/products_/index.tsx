@@ -63,7 +63,7 @@ function RouteComponent() {
   };
 
   return (
-    <div className="flex h-full max-h-[calc(100vh_-_89px)] max-w-[1600px] self-center flex-col w-full px-8 py-6 space-y-6 bg-black text-white">
+    <>
       <div className="flex flex-col gap-2">
         <Breadcrumbs>
           {breadcrumbs.map((breadcrumb, index) => (
@@ -134,6 +134,6 @@ function RouteComponent() {
           </div>
         ))} */}
       </div>
-    </div>
+    </>
   );
 }
